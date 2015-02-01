@@ -10,8 +10,6 @@ function onOpen() {
  * Convert the current document to html
  */
 function convert_to_html() {
-  var html = "";
-  
   // Get the document to which this script is bound.
   var doc = DocumentApp.getActiveDocument();
   
