@@ -24,6 +24,8 @@ function convert_to_html() {
 function Doc_To_HTML(){
   var self = this;
 
+  self.special_chars
+  
   /**
    * Convert a document to html
    * @param document <Document>
@@ -134,18 +136,18 @@ function Doc_To_HTML(){
     
     for(var i = 0; i < text_length; i++){
       var url = text.getLinkUrl(i);
-      
+      var char = self.convert_special_characters(chars[i]);
       if(url) {
         if(link_text && link_text.url != url){
           //back to back urls, but this one is different
           html += "<a href='" + link_text.url + "'>" + link_text.anchor_text + "</a>";
-          link_text = { url: url, anchor_text: chars[i] };
+          link_text = { url: url, anchor_text: char };
         }
         else if(!link_text) {
-          link_text = { url: url, anchor_text: chars[i] };
+          link_text = { url: url, anchor_text: char };
         }
         else {
-          link_text.anchor_text += chars[i];
+          link_text.anchor_text += char;
         }
       }
       else{
@@ -153,7 +155,7 @@ function Doc_To_HTML(){
           html += "<a href='" + link_text.url + "'>" + link_text.anchor_text + "</a>";
         }
         link_text = undefined;
-        html += chars[i]
+        html += char
       }
     }   
     if(link_text){
@@ -161,5 +163,15 @@ function Doc_To_HTML(){
     }
     
     return html;
+  }
+  
+  /**
+   * Finds special characters and converts them to HTML entities
+   * @param char <string>
+   * @return <srting>
+   */
+  self.convert_special_characters = function(char){
+    var output = HtmlService.createHtmlOutput(char);
+    return output.getContent();
   }
 }
